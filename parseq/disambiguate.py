@@ -1,4 +1,4 @@
-from callclaude import ask_claude
+from .callclaude import ask_claude
 import os
 
 # Read the q operators documentation from package directory

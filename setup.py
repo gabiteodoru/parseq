@@ -5,14 +5,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gabiteodoru-parseq",
-    version="0.1.2",
+    version="0.1.3",
     author="Gabi Teodoru",
     author_email="gabiteodoru@gmail.com",
     description="ParseQ: Q Language to Python Translator with AI-Powered Disambiguation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/gabiteodoru/parseq",
-    py_modules=["parseq", "callclaude", "disambiguate"],
+    packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -33,7 +33,7 @@ setup(
         # No external dependencies - uses subprocess for Claude CLI
     ],
     package_data={
-        ".": ["parseq.q", "parseq_ns.q", "q_operators.md"],
+        "parseq": ["parseq.q", "parseq_ns.q", "q_operators.md"],
     },
     include_package_data=True,
     keywords="q kdb parseq compiler translator ai claude functional-programming",

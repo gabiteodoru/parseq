@@ -1,6 +1,6 @@
 from qmcp.qlib import connect_to_q
 from typing import List as ListType, Union, Any, Tuple
-from disambiguate import disambiguate_step
+from .disambiguate import disambiguate_step
 # from callclaude import ask_claude
 import os
 
