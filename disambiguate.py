@@ -1,8 +1,10 @@
-from parseq import convert_lisp_to_flat_statements, parseq0
 from callclaude import ask_claude
+import os
 
-# Read the q operators documentation
-with open('/mnt/d/python/parseq/q_operators.md', 'r') as f:
+# Read the q operators documentation from package directory
+package_dir = os.path.dirname(__file__)
+q_ops_file = os.path.join(package_dir, 'q_operators.md')
+with open(q_ops_file, 'r') as f:
     q_ops_content = f.read()
 
 
@@ -70,12 +72,3 @@ def disambiguate_step(code: str) -> str:
     
     return '\n'.join(lines)
 
-def disambiguate_q_code(q_expression: str) -> str:
-    """
-    Take a q expression, convert to flattened Python-like code,
-    then ask Claude to add disambiguating comments
-    """
-    # Convert q to flattened Python-like code
-    flattened_code = convert_lisp_to_flat_statements(parseq0(q_expression))
-    
-    return disambiguate_step(flattened_code)

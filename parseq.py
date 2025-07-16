@@ -1,7 +1,13 @@
 from qmcp.qlib import connect_to_q
-import re
 from typing import List as ListType, Union, Any, Tuple
-from sugar import dbg
+from disambiguate import disambiguate_step
+# from callclaude import ask_claude
+import os
+
+package_dir = os.path.dirname(__file__)
+parseq_q_file = os.path.join(package_dir, 'parseq_ns.q')
+with open(parseq_q_file, 'r') as f:
+    parseq_q_code = f.read()
 
 glyph_map = {
     '@': 'at', '!': 'bang', '::': 'colon_colon',
@@ -630,15 +636,28 @@ def convert_lisp_to_flat_statements(parsed_str):
     #     else:
     #         return 'result = ' + final_expr
 
+def translate(q_expression: str, q) -> str:
+    """
+    Take a q expression, convert to flattened Python-like code,
+    then ask Claude to add disambiguating comments
+    """
+    # Convert q to flattened Python-like code
+    flattened_code = convert_lisp_to_flat_statements(parseq0(q_expression, q))
+    
+    return disambiguate_step(flattened_code)
 
-q = connect_to_q(5001)
-def parseq0(s):
-    return q('var2string parse "'+s+'"')
-def parseq(s):
+
+def parseq0(s, q):
+    return q(parseq_q_code+';.parseq.parseq',s)
+
+def parseq1(s, q):
+    return convert_lisp_to_function_calls(parseq0(s, q))
+
+def parseq(s, q):
     # return convert_lisp_to_function_calls(q('var2string parse "'+s+'"'))
-    return convert_lisp_to_flat_statements(parseq0(s))
-def pr(s):
-    print(parseq(s),'\n')
+    return convert_lisp_to_flat_statements(parseq0(s, q))
+def pr(s, q):
+    print(parseq(s, q),'\n')
 # pr('f[min]')
 # pr('a lj 2!select min s, maxs t from c')
 # pr('min x')
@@ -652,6 +671,8 @@ def pr(s):
 # pr('{x+1}')
 # print(parseq0('{a:x;x+a}'))
 # pr('{a:x;x+a}')
-pr('nmsq:{[x] ({(y+x%y)%2f}[x]/) x%2f}')
-pr('f1:{x+1};f2:{x+2}')
-pr('2+3')
+# print(parseq0('nmsq:{[x] ({(y+x%y)%2f}[x]/) x%2f}'),'\n')
+# print(parseq1('nmsq:{[x] ({(y+x%y)%2f}[x]/) x%2f}'),'\n')
+# print(parseq('nmsq:{[x] ({(y+x%y)%2f}[x]/) x%2f}'),'\n')
+# pr('f1:{x+1};f2:{x+2}')
+# pr('2+3')

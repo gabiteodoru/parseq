@@ -215,6 +215,8 @@ Examples:
 - **Error Handling**: Captures timeouts, command errors, and subprocess failures
 - **Session Management**: Uses unique directory names to prevent conflicts
 
+**Session Isolation Design**: ParseQ handles separate Claude conversations by creating temporary `claude_session_*` directories. This approach allows exactly one conversation per directory, which Claude Code CLI does not currently support natively. The temporary directories are intentionally not cleaned up during development to allow monitoring of behavior and debugging. Directory cleanup will be added in a future version once the system is mature.
+
 ### 5. Disambiguation System (`disambiguate.py`)
 
 - **Reference Documentation**: Uses `q_operators.md` as context for AI disambiguation
@@ -392,10 +394,15 @@ print(response)
 
 - **`parseq.py`**: Core AST parser, tokenizer, and flattening engine
 - **`parseq.q`**: Q initialization script that creates function mappings, type definitions, and AST serialization utilities for converting q parse trees into string representations
+- **`parseq_ns.q`**: Namespace-safe version of parseq.q with all globals prefixed with `.parseq.` to enable safe usage from remote q connections without namespace pollution
 - **`callclaude.py`**: Claude AI integration for isolated subprocess calls
 - **`disambiguate.py`**: Main disambiguation pipeline
 - **`q_operators.md`**: Comprehensive q operator reference documentation
 - **`README.md`**: This documentation
+
+## Important Note
+
+**Namespace Impact**: This Python package will create variables and functions in the `.parseq` namespace of your q session. While this is contained within a single namespace, users should be aware that some namespace modification occurs.
 
 ## Dependencies
 

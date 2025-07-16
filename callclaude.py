@@ -21,12 +21,21 @@ def ask_claude(question: str) -> str:
     
     try:
         # Run claude -p with the question (properly quoted)
+        # Use setsid and clean environment to avoid deadlocks when called from MCP server
+        clean_env = {
+            'PATH': os.environ.get('PATH'),
+            # 'ANTHROPIC_API_KEY': os.environ.get('ANTHROPIC_API_KEY'),
+            'HOME': os.environ.get('HOME', '/tmp'),
+        }
+        
         result = subprocess.run(
-            '''claude --disallowedTools Agent,Bash,Edit,Glob,Grep,LS,MultiEdit,NotebookEdit,NotebookRead,Read,Task,TodoRead,TodoWrite,WebFetch,WebSearch,Write --strict-mcp-config --mcp-config {"mcpServers":{}} -p'''.split()+[question],
+            ['setsid'] + '''claude --disallowedTools Agent,Bash,Edit,Glob,Grep,LS,MultiEdit,NotebookEdit,NotebookRead,Read,Task,TodoRead,TodoWrite,WebFetch,WebSearch,Write --strict-mcp-config --mcp-config {"mcpServers":{}} -p'''.split()+[question],
             #['claude', '-p', question],
             capture_output=True,
             text=True,
-            timeout=30  # 30 second timeout
+            timeout=30,  # 30 second timeout
+            env=clean_env,
+            stdin=subprocess.DEVNULL
         )
         
         if result.returncode == 0:
