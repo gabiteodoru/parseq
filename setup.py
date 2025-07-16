@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gabiteodoru-parseq",
-    version="0.1.1",
+    version="0.1.2",
     author="Gabi Teodoru",
     author_email="gabiteodoru@gmail.com",
     description="ParseQ: Q Language to Python Translator with AI-Powered Disambiguation",
