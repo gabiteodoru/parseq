@@ -676,3 +676,4 @@ def pr(s, q):
 # print(parseq('nmsq:{[x] ({(y+x%y)%2f}[x]/) x%2f}'),'\n')
 # pr('f1:{x+1};f2:{x+2}')
 # pr('2+3')
+

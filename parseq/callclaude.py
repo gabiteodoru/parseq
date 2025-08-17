@@ -3,7 +3,7 @@ import subprocess
 import tempfile
 import uuid
 
-def ask_claude(question: str) -> str:
+def ask_claude(question: str, timeout = 30) -> str:
     """
     Ask Claude a question by creating a temp directory and running claude -p
     Returns Claude's response as a string.
@@ -33,7 +33,7 @@ def ask_claude(question: str) -> str:
             #['claude', '-p', question],
             capture_output=True,
             text=True,
-            timeout=30,  # 30 second timeout
+            timeout=timeout,  # timeout seconds timeout
             env=clean_env,
             stdin=subprocess.DEVNULL
         )

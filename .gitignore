@@ -65,5 +65,6 @@ debug_server.sh
 test_mcp.py
 test_server.sh
 
-# Claude session directories
+# Claude session directories and settings
+.claude/
 claude_session_*/
